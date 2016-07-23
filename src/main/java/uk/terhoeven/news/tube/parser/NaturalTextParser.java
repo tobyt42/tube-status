@@ -27,13 +27,9 @@ public class NaturalTextParser
 	{
 		final List<String> lineStatuses = new ArrayList<>();
 
-		statusResponse.getStatuses().forEach(lineStatus ->
-		{
-			if (!lineStatus.getValidity().hasExpired())
-			{
-				lineStatuses.add(parse(lineStatus));
-			}
-		});
+		statusResponse.getStatuses().stream()
+				.filter(lineStatus -> !lineStatus.getValidity().hasExpired())
+				.forEach(lineStatus -> lineStatuses.add(parse(lineStatus)));
 
 		return Joiner.on(System.lineSeparator()).join(lineStatuses);
 	}
