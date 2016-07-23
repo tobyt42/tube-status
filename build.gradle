@@ -1,0 +1,21 @@
+group 'uk.terhoeven.news'
+version '1.0-SNAPSHOT'
+
+apply plugin: 'java'
+apply plugin: 'idea'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile 'org.json:json:20160212'
+    compile 'commons-io:commons-io:2.5'
+    compile 'com.google.guava:guava:19.0'
+    compile 'joda-time:joda-time:2.9.4'
+
+    testCompile 'org.mockito:mockito-core:2.0.87-beta'
+    testCompile 'junit:junit:4.12'
+}
