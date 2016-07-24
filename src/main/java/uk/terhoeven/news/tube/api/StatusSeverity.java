@@ -5,6 +5,8 @@ public enum StatusSeverity
 	PART_SUSPENDED("Part Suspended"),
 	PART_CLOSURE("Part Closure"),
 	GOOD_SERVICE("Good Service"),
+	MINOR_DELAYS("Minor Delays"),
+	SEVERE_DELAYS("Severe Delays"),
 	UNKNOWN("Unknown");
 
 	private final String severity;
@@ -24,6 +26,7 @@ public enum StatusSeverity
 			}
 		}
 
+		System.out.println("Unknown severity: " + severity);
 		return UNKNOWN;
 	}
 

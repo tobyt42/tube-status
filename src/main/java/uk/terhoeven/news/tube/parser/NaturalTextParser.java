@@ -1,12 +1,13 @@
 package uk.terhoeven.news.tube.parser;
 
 import com.google.common.base.Joiner;
-import uk.terhoeven.news.tube.api.Disruption;
-import uk.terhoeven.news.tube.api.LineStatus;
-import uk.terhoeven.news.tube.api.StatusResponse;
+import com.google.common.collect.HashMultimap;
+import com.google.common.collect.Multimap;
+import uk.terhoeven.news.tube.api.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class NaturalTextParser
 {
@@ -25,12 +26,45 @@ public class NaturalTextParser
 
 	public String parse(final StatusResponse statusResponse)
 	{
-		final List<String> lineStatuses = new ArrayList<>();
+		final Multimap<StatusSeverity, LineStatus> severityToStatusMap = HashMultimap.create();
+
+		final List<String> text = new ArrayList<>();
 
 		statusResponse.getStatuses().stream()
 				.filter(lineStatus -> !lineStatus.getValidity().hasExpired())
-				.forEach(lineStatus -> lineStatuses.add(parse(lineStatus)));
+				.forEach(lineStatus -> severityToStatusMap.put(lineStatus.getSeverity(), lineStatus));
 
-		return Joiner.on(System.lineSeparator()).join(lineStatuses);
+		if(severityToStatusMap.containsKey(StatusSeverity.GOOD_SERVICE))
+		{
+			text.add(getStatus(StatusSeverity.GOOD_SERVICE, severityToStatusMap));
+		}
+
+		severityToStatusMap.keySet().stream()
+				.filter(statusSeverity -> statusSeverity != StatusSeverity.GOOD_SERVICE)
+				.forEach(statusSeverity -> text.add(getStatus(statusSeverity, severityToStatusMap)));
+
+		text.add("");
+
+		severityToStatusMap.keySet().stream()
+				.filter(statusSeverity -> statusSeverity != StatusSeverity.GOOD_SERVICE)
+				.map(severityToStatusMap::get)
+				.forEach(lineStatuses -> lineStatuses.stream()
+						.filter(lineStatus -> lineStatus.getDisruption() != null)
+						.forEach(lineStatus -> text.add(lineStatus.getDisruption().getCategory() + " disruption on " + lineStatus.getDisruption().getDescription())));
+
+		return Joiner.on(System.lineSeparator()).join(text);
+	}
+
+	private String getStatus(final StatusSeverity severity, final Multimap<StatusSeverity, LineStatus> severityToStatusMap)
+	{
+		final List<String> lines = severityToStatusMap.get(severity).stream()
+				.map(LineStatus::getLine)
+				.map(Line::getName)
+				.collect(Collectors.toList());
+
+		final String linesText = lines.size() == 1
+				? lines.get(0)
+				: Joiner.on(", ").join(lines.subList(0, lines.size() - 1)) + " and " + lines.get(lines.size() - 1);
+		return severity + " on the " + linesText + (lines.size() > 1 ? " lines." : " line.");
 	}
 }
