@@ -3,6 +3,9 @@ version '1.0-SNAPSHOT'
 
 apply plugin: 'java'
 apply plugin: 'idea'
+apply plugin: 'application'
+
+mainClassName = 'uk.terhoeven.news.tube.ExampleApp'
 
 sourceCompatibility = 1.8
 
