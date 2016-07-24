@@ -59,12 +59,13 @@ public class NaturalTextParser
 	{
 		final List<String> lines = severityToStatusMap.get(severity).stream()
 				.map(LineStatus::getLine)
+				.distinct()
 				.map(Line::getName)
 				.collect(Collectors.toList());
 
-		final String linesText = lines.size() == 1
-				? lines.get(0)
-				: Joiner.on(", ").join(lines.subList(0, lines.size() - 1)) + " and " + lines.get(lines.size() - 1);
-		return severity + " on the " + linesText + (lines.size() > 1 ? " lines." : " line.");
+		return lines.size() == 1
+				? severity + " on the " + lines.get(0) + " line."
+				: severity + " on the " + Joiner.on(", ").join(lines.subList(0, lines.size() - 1))
+					+ " and " + lines.get(lines.size() - 1) + " lines.";
 	}
 }
