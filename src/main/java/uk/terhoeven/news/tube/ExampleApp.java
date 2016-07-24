@@ -10,6 +10,8 @@ import uk.terhoeven.news.tube.parser.NaturalTextParser;
 import java.io.IOException;
 
 import static uk.terhoeven.news.tube.api.Line.*;
+import static uk.terhoeven.news.tube.api.Line.CENTRAL;
+import static uk.terhoeven.news.tube.api.Line.OVERGROUND;
 
 public class ExampleApp
 {
@@ -24,9 +26,9 @@ public class ExampleApp
 		this.parser = parser;
 	}
 
-	public void start() throws IOException
+	public void start(final String[] lines) throws IOException
 	{
-		final JSONArray status = requestHandler.requestStatus(BAKERLOO.getId(), CIRCLE.getId(), HAMMERSMITH_CITY.getId(), METROPOLITAN.getId(), CENTRAL.getId(), OVERGROUND.getId());
+		final JSONArray status = requestHandler.requestStatus(lines);
 		final StatusResponse statusResponse = mapper.mapStatusResponse(status);
 		System.out.println(parser.parse(statusResponse));
 	}
@@ -38,7 +40,7 @@ public class ExampleApp
 		final NaturalTextParser parser = new NaturalTextParser();
 
 		final ExampleApp app = new ExampleApp(requestHandler, mapper, parser);
-		app.start();
+		app.start(args.length > 0 ? args : new String[] {BAKERLOO.getId(), CIRCLE.getId(), HAMMERSMITH_CITY.getId(), METROPOLITAN.getId(), CENTRAL.getId(), OVERGROUND.getId()});
 	}
 
 }
