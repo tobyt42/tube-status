@@ -49,8 +49,14 @@ public class NaturalTextParser
 				.filter(statusSeverity -> statusSeverity != StatusSeverity.GOOD_SERVICE)
 				.map(severityToStatusMap::get)
 				.forEach(lineStatuses -> lineStatuses.stream()
-						.filter(lineStatus -> lineStatus.getDisruption() != null)
-						.forEach(lineStatus -> text.add(lineStatus.getDisruption().getCategory() + " disruption on " + lineStatus.getDisruption().getDescription())));
+						.filter(lineStatus -> lineStatus.getDisruption() != null).forEach(lineStatus ->
+						{
+							final String status = lineStatus.getDisruption().getCategory() + " disruption on " + lineStatus.getDisruption().getDescription();
+							if (!text.contains(status))
+							{
+								text.add(status);
+							}
+						}));
 
 		return Joiner.on(System.lineSeparator()).join(text);
 	}
