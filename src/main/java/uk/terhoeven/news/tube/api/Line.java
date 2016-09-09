@@ -2,6 +2,10 @@ package uk.terhoeven.news.tube.api;
 
 import com.google.common.base.MoreObjects;
 
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Optional;
+
 public class Line
 {
 	public static Line BAKERLOO = new Line("bakerloo", "Bakerloo");
@@ -19,6 +23,7 @@ public class Line
 	public static Line TRAM = new Line("tram", "Tram");
 	public static Line VICTORIA = new Line("victoria", "Victoria");
 	public static Line WATERLOO_CITY = new Line("waterloo-city", "Waterloo and City");
+	public static Collection<Line> LINES = Arrays.asList(BAKERLOO, CENTRAL, CIRCLE, DISTRICT, DLR, JUBILEE, HAMMERSMITH_CITY, METROPOLITAN, NORTHERN, OVERGROUND, PICCADILLY, TFL_RAIL, TRAM, VICTORIA, WATERLOO_CITY);
 
 	private final String id;
 	private final String name;
@@ -31,67 +36,9 @@ public class Line
 
 	public static Line parse(final String lineId)
 	{
-		// TODO: do this nicer
-
-		if (BAKERLOO.getId().equals(lineId))
-		{
-			return BAKERLOO;
-		}
-		if (CENTRAL.getId().equals(lineId))
-		{
-			return CENTRAL;
-		}
-		if (CIRCLE.getId().equals(lineId))
-		{
-			return CIRCLE;
-		}
-		if (DISTRICT.getId().equals(lineId))
-		{
-			return DISTRICT;
-		}
-		if (DLR.getId().equals(lineId))
-		{
-			return DLR;
-		}
-		if (HAMMERSMITH_CITY.getId().equals(lineId))
-		{
-			return HAMMERSMITH_CITY;
-		}
-		if (JUBILEE.getId().equals(lineId))
-		{
-			return JUBILEE;
-		}
-		if (METROPOLITAN.getId().equals(lineId))
-		{
-			return METROPOLITAN;
-		}
-		if (NORTHERN.getId().equals(lineId))
-		{
-			return NORTHERN;
-		}
-		if (OVERGROUND.getId().equals(lineId))
-		{
-			return OVERGROUND;
-		}
-		if (PICCADILLY.getId().equals(lineId))
-		{
-			return PICCADILLY;
-		}
-		if (TFL_RAIL.getId().equals(lineId))
-		{
-			return TFL_RAIL;
-		}
-		if (TRAM.getId().equals(lineId))
-		{
-			return TRAM;
-		}
-		if (VICTORIA.getId().equals(lineId))
-		{
-			return VICTORIA;
-		}
-		if (WATERLOO_CITY.getId().equals(lineId))
-		{
-			return WATERLOO_CITY;
+		final Optional<Line> match = LINES.stream().filter(line -> line.getId().equals(lineId)).findAny();
+		if (match.isPresent()) {
+			return match.get();
 		}
 		return new Line(lineId, lineId);
 	}
