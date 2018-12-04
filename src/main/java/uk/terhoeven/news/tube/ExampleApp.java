@@ -38,7 +38,7 @@ public class ExampleApp
 		final NaturalTextParser parser = new NaturalTextParser();
 
 		final ExampleApp app = new ExampleApp(requestHandler, mapper, parser);
-		app.start(args.length > 0 ? args : new String[] {BAKERLOO.getId(), CIRCLE.getId(), HAMMERSMITH_CITY.getId(), METROPOLITAN.getId(), CENTRAL.getId(), OVERGROUND.getId(), DISTRICT.getId(), JUBILEE.getId(), NORTHERN.getId(), PICCADILLY.getId(), VICTORIA.getId(), WATERLOO_CITY.getId(), TFL_RAIL.getId(), DLR.getId(), TRAM.getId()});
+		app.start(args.length > 0 ? args : LINE_IDS.toArray(new String[0]));
 	}
 
 }

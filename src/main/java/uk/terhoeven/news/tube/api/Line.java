@@ -5,6 +5,7 @@ import com.google.common.base.MoreObjects;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class Line
 {
@@ -24,7 +25,7 @@ public class Line
 	public static Line VICTORIA = new Line("victoria", "Victoria");
 	public static Line WATERLOO_CITY = new Line("waterloo-city", "Waterloo and City");
 	public static Collection<Line> LINES = Arrays.asList(BAKERLOO, CENTRAL, CIRCLE, DISTRICT, DLR, JUBILEE, HAMMERSMITH_CITY, METROPOLITAN, NORTHERN, OVERGROUND, PICCADILLY, TFL_RAIL, TRAM, VICTORIA, WATERLOO_CITY);
-
+	public static Collection<String> LINE_IDS = LINES.stream().map(Line::getId).collect(Collectors.toList());
 	private final String id;
 	private final String name;
 
